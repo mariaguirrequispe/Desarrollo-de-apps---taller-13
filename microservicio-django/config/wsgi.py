@@ -1,4 +1,22 @@
+<<<<<<< HEAD
 import os
 from django.core.wsgi import get_wsgi_application
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
+=======
+"""
+Configuración WSGI para el proyecto config.
+
+Expone el objeto invocable WSGI como una variable a nivel de módulo llamada ``application``.
+
+Para más información sobre este archivo, consulta
+https://docs.djangoproject.com/en/6.1/howto/deployment/wsgi/
+"""
+
+import os
+
+from django.core.wsgi import get_wsgi_application
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
+
+>>>>>>> origin/main
 application = get_wsgi_application()
