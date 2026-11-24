@@ -1,0 +1,17 @@
+{
+  "url": "http://127.0.0.1:8000/api/albumes/",
+  "metodo": "GET",
+  "total": 500,
+  "concurrencia": 100,
+  "exitosas": 500,
+  "errores": 0,
+  "duracion_s": 1.08,
+  "throughput_rps": 463.1,
+  "ms": {
+    "min": "48.7",
+    "p50": "197.2",
+    "p95": "233.5",
+    "p99": "264.6",
+    "max": "272.6"
+  }
+}
