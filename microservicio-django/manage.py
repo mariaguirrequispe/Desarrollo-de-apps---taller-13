@@ -1,12 +1,4 @@
 #!/usr/bin/env python
-<<<<<<< HEAD
-import os
-import sys
-if __name__ == '__main__':
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-    from django.core.management import execute_from_command_line
-    execute_from_command_line(sys.argv)
-=======
 """Utilidad de línea de comandos de Django para tareas administrativas."""
 
 import os
@@ -29,4 +21,3 @@ def main():
 
 if __name__ == "__main__":
     main()
->>>>>>> origin/main

@@ -1,6 +1,6 @@
-<<<<<<< HEAD
 from rest_framework.test import APITestCase
 from .models import Album, Track
+
 
 class CatalogoTests(APITestCase):
     def setUp(self):
@@ -52,8 +52,3 @@ class CatalogoTests(APITestCase):
         from django.conf import settings
         self.assertEqual(settings.DATABASES['default']['ENGINE'], 'django.db.backends.sqlite3')
         self.assertEqual(Album.objects.get(pk=self.album.id).titulo, 'Prueba')
-=======
-from django.test import TestCase
-
-# Escribe tus pruebas aquí.
->>>>>>> origin/main

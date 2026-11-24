@@ -1,8 +1,3 @@
-<<<<<<< HEAD
-import os
-from django.core.asgi import get_asgi_application
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
-=======
 """
 Configuración ASGI para el proyecto config.
 
@@ -18,5 +13,4 @@ from django.core.asgi import get_asgi_application
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
->>>>>>> origin/main
 application = get_asgi_application()
