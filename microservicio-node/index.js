@@ -1,76 +1,61 @@
-// Microservicio 1: Node.js + Firebase (Cloud Firestore)
-// Autora: Antonela - rama feat/firebase-node
-const path = require('path');
+// Microservicio de telemetria: Node.js + Express + Firebase Admin (Cloud Firestore)
 const express = require('express');
 const admin = require('firebase-admin');
+const path = require('path');
 
-// La clave privada NO se sube al repo (ver .gitignore).
-const keyPath =
-  process.env.GOOGLE_APPLICATION_CREDENTIALS ||
-  path.join(__dirname, 'serviceAccountKey.json');
+// La clave privada se lee de un archivo FUERA del control de versiones (.gitignore)
+// o de la variable GOOGLE_APPLICATION_CREDENTIALS_PATH.
+const keyPath = process.env.GOOGLE_APPLICATION_CREDENTIALS_PATH
+  || path.join(__dirname, 'serviceAccountKey.json');
+const serviceAccount = require(keyPath);
 
-admin.initializeApp({
-  credential: admin.credential.cert(require(keyPath)),
-});
-
+admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 const db = admin.firestore();
 const COLECCION = 'reproducciones';
 
 const app = express();
 app.use(express.json());
 
-// Estado del servicio
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', servicio: 'telemetria', timestamp: new Date().toISOString() });
+});
 
-// Registrar una reproduccion (telemetria)
 app.post('/reproducciones', async (req, res) => {
+  const { usuario, trackId, titulo } = req.body || {};
+  if (!usuario || trackId === undefined || !titulo) {
+    return res.status(400).json({ error: 'usuario, trackId y titulo son obligatorios' });
+  }
   try {
-    const { usuario, trackId, titulo } = req.body;
-    if (!usuario || !trackId) {
-      return res.status(400).json({ error: 'usuario y trackId son obligatorios' });
-    }
     const ref = await db.collection(COLECCION).add({
-      usuario,
-      trackId,
-      titulo: titulo || null,
+      usuario, trackId, titulo,
       fecha: admin.firestore.FieldValue.serverTimestamp(),
     });
     res.status(201).json({ id: ref.id });
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Error al guardar en Firestore' });
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
 });
 
-// Consultar las ultimas reproducciones
 app.get('/reproducciones', async (req, res) => {
   try {
-    const snap = await db
-      .collection(COLECCION)
-      .orderBy('fecha', 'desc')
-      .limit(20)
-      .get();
-    res.json(snap.docs.map((d) => ({ id: d.id, ...d.data() })));
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: 'Error al consultar Firestore' });
+    const snap = await db.collection(COLECCION).orderBy('fecha', 'desc').limit(20).get();
+    res.json(snap.docs.map(d => ({ id: d.id, ...d.data() })));
+  } catch (e) {
+    res.status(500).json({ error: e.message });
   }
 });
 
 const PORT = process.env.PORT || 3000;
-
 app.listen(PORT, async () => {
-  console.log(`Microservicio Node escuchando en http://localhost:${PORT}`);
-  // Registro inicial: evidencia de persistencia al arrancar
+  console.log(`Microservicio de telemetria escuchando en el puerto ${PORT}`);
+  // Registro inicial al arrancar (requisito: persistir al menos un registro)
   try {
     const ref = await db.collection(COLECCION).add({
-      usuario: 'demo',
-      trackId: 0,
-      titulo: 'Registro inicial de arranque',
+      usuario: 'sistema', trackId: 0, titulo: 'Registro inicial de arranque',
       fecha: admin.firestore.FieldValue.serverTimestamp(),
     });
-    console.log('Registro inicial guardado en Firestore, id:', ref.id);
-  } catch (err) {
-    console.error('No se pudo guardar el registro inicial:', err.message);
+    console.log('Registro inicial guardado en Firestore con id:', ref.id);
+  } catch (e) {
+    console.error('No se pudo guardar el registro inicial:', e.message);
   }
 });

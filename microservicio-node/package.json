@@ -1,7 +1,7 @@
 {
-  "name": "microservicio-node",
+  "name": "microservicio-telemetria",
   "version": "1.0.0",
-  "description": "Microservicio de telemetria de reproducciones (Node.js + Firebase Firestore)",
+  "description": "Microservicio de telemetria de reproducciones (Node.js + Firebase Cloud Firestore)",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "express": "^4.19.2",
-    "firebase-admin": "^12.0.0",
-    "newrelic": "^11.0.0"
+    "firebase-admin": "^12.6.0",
+    "newrelic": "^12.5.0"
   }
 }
