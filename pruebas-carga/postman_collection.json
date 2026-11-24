@@ -1,0 +1,12 @@
+{
+  "info": { "name": "Streaming y Telemetria", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "variable": [ { "key": "node", "value": "http://localhost:3000" }, { "key": "django", "value": "http://localhost:8000" } ],
+  "item": [
+    { "name": "Node - health", "request": { "method": "GET", "url": "{{node}}/health" } },
+    { "name": "Node - POST reproduccion", "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "url": "{{node}}/reproducciones", "body": { "mode": "raw", "raw": "{\"usuario\":\"u1\",\"trackId\":1,\"titulo\":\"Something\"}" } } },
+    { "name": "Node - GET reproducciones", "request": { "method": "GET", "url": "{{node}}/reproducciones" } },
+    { "name": "Django - GET albumes", "request": { "method": "GET", "url": "{{django}}/api/albumes/" } },
+    { "name": "Django - GET tracks", "request": { "method": "GET", "url": "{{django}}/api/tracks/" } },
+    { "name": "Django - POST album", "request": { "method": "POST", "header": [{"key":"Content-Type","value":"application/json"}], "url": "{{django}}/api/albumes/", "body": { "mode": "raw", "raw": "{\"titulo\":\"Abbey Road\",\"artista\":\"The Beatles\",\"anio\":1969}" } } }
+  ]
+}
